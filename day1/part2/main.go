@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 )
 
 func check(e error) {
@@ -29,6 +28,7 @@ func main() {
 
 	similarityScore := 0
 	for key, value := range hashmap {
+		fmt.Println("Key:", key, "Value:", value)
 		similarityScore += key * value
 	}
 	fmt.Println("similarityScore", similarityScore)
@@ -44,8 +44,7 @@ func getInputLists() ([]int, []int) {
 	var rightList []int
 	isLeftList := true
 	for scanner.Scan() {
-		getNumArray(scanner)
-
+		x, err := strconv.Atoi(scanner.Text())
 		check(err)
 		if isLeftList {
 			leftList = append(leftList, x)
