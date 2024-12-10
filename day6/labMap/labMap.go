@@ -1,6 +1,8 @@
 package labMap
 
-import "errors"
+import (
+	"errors"
+)
 
 const (
 	Up = iota
@@ -22,7 +24,7 @@ type guard struct {
 }
 
 func (lm *LabMap) GetGuardPosition() ([]int, error) {
-	return []int{lm.Guard.x, lm.Guard.y}, nil
+	return []int{lm.Guard.x, lm.Guard.y, Up}, nil
 }
 
 func (lm *LabMap) MoveGuard() ([]int, error) {
@@ -33,7 +35,8 @@ func (lm *LabMap) MoveGuard() ([]int, error) {
 		Left:  {lm.Guard.x - 1, lm.Guard.y},
 	}
 	newPosition := directionToNewPosition[lm.Guard.direction]
-	if newPosition[0] > lm.MapBounds[0] || newPosition[1] > lm.MapBounds[1] {
+	if newPosition[0] > lm.MapBounds[0] || newPosition[1] > lm.MapBounds[1] ||
+		newPosition[0] < 0 || newPosition[1] < 0 {
 		return newPosition, errors.New("guard moves out of map")
 	}
 	for lm.isWall(newPosition[0], newPosition[1]) {
@@ -41,7 +44,7 @@ func (lm *LabMap) MoveGuard() ([]int, error) {
 		newPosition = directionToNewPosition[lm.Guard.direction]
 	}
 	lm.Guard.updatePosition(newPosition[0], newPosition[1])
-	return newPosition, nil
+	return append(newPosition, lm.Guard.direction), nil
 }
 
 func (g *guard) updatePosition(x, y int) {
@@ -52,6 +55,7 @@ func (g *guard) turnRight() {
 	g.direction = (g.direction + 1) % 4
 }
 func (lm *LabMap) isWall(x int, y int) bool {
+
 	return lm.Walls[y][x]
 }
 

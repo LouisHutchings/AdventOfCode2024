@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"day6/part1/labMap"
+	"day6/labMap"
 	"fmt"
 	"os"
 )
